@@ -6,7 +6,6 @@ import Button from "./button";
 import { useNavigate } from "react-router-dom";
 
 function submit(name, cpf, filme, dia, hora, ingressos, reserve, navigate) {
-  console.log(filme);
   if (name !== "" && cpf !== "" && cpf.length <= 11) {
     axios
       .post(
@@ -27,8 +26,10 @@ export default function Seat() {
   const { idSessao } = useParams();
   const [seat, setSeat] = useState([]);
   const [isAvailable, setisAvailable] = useState([]);
+  const [chair, setChair] = useState([]);
   const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
+
   const reserve = { ids: isAvailable, name: name, cpf: cpf };
 
   let navigate = useNavigate();
@@ -46,7 +47,7 @@ export default function Seat() {
   const filme = seat.movie?.title;
   const dia = seat.day?.date;
   const hora = seat?.name;
-  const ingressos = isAvailable;
+  const ingressos = chair;
 
   return (
     <>
@@ -62,6 +63,7 @@ export default function Seat() {
                   name={element.name}
                   id={element.id}
                   setisAvailable={setisAvailable}
+                  setChair={setChair}
                 />
               );
             })}

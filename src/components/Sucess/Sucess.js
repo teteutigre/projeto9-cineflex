@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 export default function Sucess() {
   const { state } = useLocation();
-  console.log(state.ingressos);
   return (
     <Main>
       <h1>

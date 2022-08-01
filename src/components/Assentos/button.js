@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-export default function Button({ classe, name, id, setisAvailable }) {
+export default function Button({ classe, name, id, setisAvailable, setChair }) {
   const [select, setSelect] = useState(false);
 
   useEffect(() => {
@@ -9,8 +9,13 @@ export default function Button({ classe, name, id, setisAvailable }) {
       setisAvailable((element) => {
         return element.filter((e) => e !== Number(id));
       });
+
+      setChair((a) => {
+        return a.filter((b) => b !== Number(name));
+      });
     } else {
       setisAvailable((element) => [...element, Number(id)]);
+      setChair((a) => [...a, Number(name)]);
     }
   }, [select]);
   return (
