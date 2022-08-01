@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default function Final() {
+export default function Sucess() {
   const { state } = useLocation();
+  console.log(state.ingressos);
   return (
     <Main>
       <h1>
@@ -12,22 +14,28 @@ export default function Final() {
         <div>
           <h2>Filme e sessão</h2>
           <p>{state.filme}</p>
+          <p>
+            {state.dia} {state.hora}
+          </p>
         </div>
 
         <div>
           <h2>Ingressos</h2>
-          <p></p>
+          {state.ingressos.map((element) => {
+            return <p>{`Assento ${element}`}</p>;
+          })}
         </div>
 
         <div>
           <h2>Comprador</h2>
-          <p>
-            Nome: João da Silva Sauro <br /> CPF: 123.456.789-10
-          </p>
+          <p>{`Nome: ${state.name}`}</p>
+          <p>{`CPF: ${state.cpf}`}</p>
         </div>
       </div>
 
-      <button>Voltar pra Home</button>
+      <Link to="/">
+        <button>Voltar pra Home</button>
+      </Link>
     </Main>
   );
 }

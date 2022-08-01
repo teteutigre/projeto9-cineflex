@@ -5,14 +5,31 @@ import { useEffect, useState } from "react";
 import Button from "./button";
 import { useNavigate } from "react-router-dom";
 
+function submit(name, cpf, filme, dia, hora, ingressos, reserve, navigate) {
+  console.log(filme);
+  if (name !== "" && cpf !== "" && cpf.length <= 11) {
+    axios
+      .post(
+        "https://mock-api.driven.com.br/api/v7/cineflex/seats/book-many",
+        reserve
+      )
+      .then(() => {
+        navigate("/sucesso", {
+          state: { name, cpf, filme, dia, hora, ingressos },
+        });
+      });
+  } else {
+    alert("CPF deve conter 11 números");
+  }
+}
+
 export default function Seat() {
   const { idSessao } = useParams();
   const [seat, setSeat] = useState([]);
   const [isAvailable, setisAvailable] = useState([]);
-  const [text, setText] = useState("");
-  const [number, setNumber] = useState("");
-
-  const reserve = { ids: isAvailable, name: text, cpf: number };
+  const [name, setName] = useState("");
+  const [cpf, setCpf] = useState("");
+  const reserve = { ids: isAvailable, name: name, cpf: cpf };
 
   let navigate = useNavigate();
 
@@ -26,28 +43,10 @@ export default function Seat() {
       });
   }, []);
 
-  function handleForm(event) {
-    event.preventDefault();
-  }
-
-  function submit() {
-    if (text !== "" && number !== "") {
-      axios.post(
-        "https://mock-api.driven.com.br/api/v7/cineflex/seats/book-many",
-        reserve
-      );
-      navigate("../sucesso", { replace: true }, { state: info });
-    }
-  }
-
-  const info = {
-    filme: seat.movie?.title,
-    dia: seat.day?.weekday,
-    hora: seat?.name,
-    ingressos: isAvailable,
-    nome: text,
-    cpf: number,
-  };
+  const filme = seat.movie?.title;
+  const dia = seat.day?.date;
+  const hora = seat?.name;
+  const ingressos = isAvailable;
 
   return (
     <>
@@ -84,14 +83,20 @@ export default function Seat() {
           </div>
         </div>
 
-        <form onSubmit={handleForm} className="inputs">
+        <form
+          onSubmit={(element) => {
+            element.preventDefault();
+            submit(name, cpf, filme, dia, hora, ingressos, reserve, navigate);
+          }}
+          className="inputs"
+        >
           <div>
             {" "}
             <p>Nome do comprador:</p>
             <input
               required
-              type="text"
-              onChange={(e) => setText(e.target.value)}
+              type="name"
+              onChange={(e) => setName(e.target.value)}
               placeholder="Digite seu nome..."
             />
           </div>
@@ -99,13 +104,13 @@ export default function Seat() {
             <p>CPF do comprador:</p>
             <input
               required
-              type="number"
-              onChange={(e) => setNumber(e.target.value)}
+              type="cpf"
+              onChange={(e) => setCpf(e.target.value)}
               placeholder="Digite seu CPF..."
             />
           </div>
 
-          <button type="submit" onClick={submit} className="finalizar">
+          <button type="submit" className="finalizar">
             Reservar assento(s)
           </button>
         </form>
