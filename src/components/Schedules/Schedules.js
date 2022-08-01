@@ -79,6 +79,7 @@ const Main = styled.div`
     flex-direction: column;
     justify-content: center;
     align-content: center;
+
     gap: 3.2rem;
   }
 
